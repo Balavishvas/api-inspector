@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11110f">
+  <title>API Inspector — request workbench</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="paper"></div>
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="mark">/</span>
+      <span>API Inspector</span>
+    </a>
+    <div class="top-meta"><span class="pulse"></span> local workbench <span class="slash">/</span> v1.0</div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">REQUEST WORKBENCH</p>
+        <h1>See what your<br><em>API is saying.</em></h1>
+      </div>
+      <p class="lede">A small, focused space for sending requests, reading responses and keeping the useful bits close.</p>
+    </section>
+
+    <section class="workspace">
+      <aside class="rail">
+        <div class="rail-head">
+          <span>RECENT</span>
+          <button id="clearHistory" title="Clear history">clear</button>
+        </div>
+        <div id="history" class="history"></div>
+        <div class="rail-note">
+          <span class="dot"></span>
+          Nothing leaves your browser<br>except the API request itself.
+        </div>
+      </aside>
+
+      <section class="request-panel">
+        <div class="request-line">
+          <select id="method" aria-label="HTTP method">
+            <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
+          </select>
+          <input id="url" value="https://jsonplaceholder.typicode.com/posts/1" spellcheck="false" aria-label="Request URL">
+          <button id="send" class="send">SEND <span>↗</span></button>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="params">Params</button>
+          <button class="tab" data-tab="headers">Headers</button>
+          <button class="tab" data-tab="body">Body</button>
+          <button class="tab" data-tab="auth">Auth</button>
+        </div>
+
+        <div class="tab-content" id="params">
+          <div class="section-label"><span>QUERY PARAMETERS</span><button class="add" data-add="params">+ add row</button></div>
+          <div id="paramsRows" class="kv-list"></div>
+        </div>
+
+        <div class="tab-content hidden" id="headers">
+          <div class="section-label"><span>REQUEST HEADERS</span><button class="add" data-add="headers">+ add row</button></div>
+          <div id="headersRows" class="kv-list"></div>
+        </div>
+
+        <div class="tab-content hidden" id="body">
+          <div class="section-label"><span>JSON BODY</span><button id="formatBody" class="add">format</button></div>
+          <textarea id="bodyInput" class="codebox" spellcheck="false" placeholder='{ "hello": "world" }'></textarea>
+        </div>
+
+        <div class="tab-content hidden" id="auth">
+          <div class="section-label"><span>BEARER TOKEN</span></div>
+          <input id="tokenInput" class="single-input" placeholder="Paste token — it stays in this browser" spellcheck="false">
+          <p class="hint">Adds an Authorization header when you send the request.</p>
+        </div>
+
+        <div class="utility-strip">
+          <button id="curlBtn">copy cURL</button>
+          <button id="jwtBtn">inspect JWT</button>
+          <span class="shortcut">Ctrl / ⌘ + Enter to send</span>
+        </div>
+      </section>
+
+      <section class="response-panel">
+        <div class="response-head">
+          <div><span class="eyebrow">RESPONSE</span><div id="status" class="status idle">waiting for a request</div></div>
+          <div class="metrics">
+            <span><b id="time">—</b> ms</span>
+            <span><b id="size">—</b></span>
+          </div>
+        </div>
+        <div class="response-tabs">
+          <button class="response-tab active">Preview</button>
+          <button class="response-tab" id="responseHeadersBtn">Headers</button>
+        </div>
+        <pre id="response" class="response-box"><span class="ghost">Your response will appear here.</span></pre>
+        <div id="responseHeaders" class="response-box hidden"></div>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <dialog id="jwtDialog">
+    <div class="dialog-head"><span>JWT PAYLOAD</span><button id="closeJwt">×</button></div>
+    <pre id="jwtOutput"></pre>
+  </dialog>
+  <script src="/static/app.js"></script>
+</body>
+</html>

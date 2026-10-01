@@ -94,6 +94,14 @@ function buildCurl(){
   if(body.trim()) c+=" \\\n  -d '"+body.replaceAll("'","\\'")+"'";
   navigator.clipboard.writeText(c); toast("cURL copied.");
 }
+function exportHistory(){
+  if(!state.history.length) return toast("No request history to export.");
+  const blob=new Blob([JSON.stringify(state.history,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download="api-inspector-history.json";
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  toast("History exported.");
+}
 function inspectJwt(){
   const token=$("#tokenInput").value.trim() || prompt("Paste a JWT token");
   if(!token)return;
@@ -112,6 +120,7 @@ $$("[data-add]").forEach(btn=>btn.onclick=()=>addRow("#"+btn.dataset.add+"Rows")
 $("#send").onclick=sendRequest;
 $("#curlBtn").onclick=buildCurl;
 $("#jwtBtn").onclick=inspectJwt;
+$("#exportHistory").onclick=exportHistory;
 $("#closeJwt").onclick=()=>$("#jwtDialog").close();
 $("#clearHistory").onclick=()=>{state.history=[];localStorage.removeItem("apiInspectorHistory");renderHistory();};
 $("#formatBody").onclick=()=>{
